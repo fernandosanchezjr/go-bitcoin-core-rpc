@@ -8,7 +8,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcutil"
 	"github.com/stevenroose/go-bitcoin-core-rpc/btcjson"
@@ -415,3 +414,30 @@ func (c *Client) SubmitBlock(block *btcutil.Block, options *btcjson.SubmitBlockO
 }
 
 // TODO(davec): Implement GetBlockTemplate
+
+type FutureGetBlockTemplateResult chan *response
+
+func (r FutureGetBlockTemplateResult) Receive() (*btcjson.GetBlockTemplateResult, error) {
+	res, err := receiveFuture(r)
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal result as a boolean.
+	var blockTemplate btcjson.GetBlockTemplateResult
+	err = json.Unmarshal(res, &blockTemplate)
+	if err != nil {
+		return nil, err
+	}
+
+	return &blockTemplate, nil
+}
+
+func (c *Client) GetBlockTemplateAsync(options *btcjson.TemplateRequest) FutureGetBlockTemplateResult {
+	cmd := btcjson.NewGetBlockTemplateCmd(options)
+	return c.sendCmd(cmd)
+}
+
+func (c *Client) GetBlockTemplate(options *btcjson.TemplateRequest) (*btcjson.GetBlockTemplateResult, error) {
+	return c.GetBlockTemplateAsync(options).Receive()
+}

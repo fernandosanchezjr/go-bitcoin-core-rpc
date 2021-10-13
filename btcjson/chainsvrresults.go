@@ -104,6 +104,10 @@ type SoftForkDescription struct {
 	Reject  struct {
 		Status bool `json:"status"`
 	} `json:"reject"`
+	Type   string                   `json:"type"`
+	Active bool                     `json:"active"`
+	Height int32                    `json:"height"`
+	Bip9   *Bip9SoftForkDescription `json:"bip9"`
 }
 
 // Bip9SoftForkDescription describes the current state of a defined BIP0009
@@ -129,7 +133,7 @@ type GetBlockChainInfoResult struct {
 	Pruned               bool                                `json:"pruned"`
 	PruneHeight          int32                               `json:"pruneheight,omitempty"`
 	ChainWork            string                              `json:"chainwork,omitempty"`
-	SoftForks            []*SoftForkDescription              `json:"softforks"`
+	SoftForks            map[string]*SoftForkDescription     `json:"softforks"`
 	Bip9SoftForks        map[string]*Bip9SoftForkDescription `json:"bip9_softforks"`
 }
 
@@ -156,7 +160,7 @@ type GetBlockTemplateResult struct {
 	// Base fields from BIP 0022.  CoinbaseAux is optional.  One of
 	// CoinbaseTxn or CoinbaseValue must be specified, but not both.
 	Bits          string                     `json:"bits"`
-	CurTime       int64                      `json:"curtime"`
+	CurTime       uint32                     `json:"curtime"`
 	Height        int64                      `json:"height"`
 	PreviousHash  string                     `json:"previousblockhash"`
 	SigOpLimit    int64                      `json:"sigoplimit,omitempty"`
@@ -166,7 +170,7 @@ type GetBlockTemplateResult struct {
 	Version       int32                      `json:"version"`
 	CoinbaseAux   *GetBlockTemplateResultAux `json:"coinbaseaux,omitempty"`
 	CoinbaseTxn   *GetBlockTemplateResultTx  `json:"coinbasetxn,omitempty"`
-	CoinbaseValue *int64                     `json:"coinbasevalue,omitempty"`
+	CoinbaseValue int64                      `json:"coinbasevalue,omitempty"`
 	WorkID        string                     `json:"workid,omitempty"`
 
 	// Witness commitment defined in BIP 0141.
@@ -182,8 +186,8 @@ type GetBlockTemplateResult struct {
 	Expires int64  `json:"expires,omitempty"`
 
 	// Mutations from BIP 0023.
-	MaxTime    int64    `json:"maxtime,omitempty"`
-	MinTime    int64    `json:"mintime,omitempty"`
+	MaxTime    uint32   `json:"maxtime,omitempty"`
+	MinTime    uint32   `json:"mintime,omitempty"`
 	Mutable    []string `json:"mutable,omitempty"`
 	NonceRange string   `json:"noncerange,omitempty"`
 
@@ -490,7 +494,7 @@ type GetMiningInfoResult struct {
 	Generate           bool    `json:"generate"`
 	GenProcLimit       int32   `json:"genproclimit"`
 	HashesPerSec       int64   `json:"hashespersec"`
-	NetworkHashPS      int64   `json:"networkhashps"`
+	NetworkHashPS      float64 `json:"networkhashps"`
 	PooledTx           uint64  `json:"pooledtx"`
 	TestNet            bool    `json:"testnet"`
 }
