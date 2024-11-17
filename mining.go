@@ -8,8 +8,8 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcutil"
 	"github.com/stevenroose/go-bitcoin-core-rpc/btcjson"
 )
 

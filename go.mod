@@ -3,7 +3,11 @@ module github.com/stevenroose/go-bitcoin-core-rpc
 go 1.16
 
 require (
-	github.com/btcsuite/btcd v0.22.0-beta
-	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f
-	github.com/btcsuite/btcutil v1.0.3-0.20201208143702-a53e38424cce
+	github.com/btcsuite/btcd v0.24.2
+	github.com/btcsuite/btcd/btcec/v2 v2.3.4 // indirect
+	github.com/btcsuite/btcd/btcutil v1.1.6
+	github.com/btcsuite/btcd/chaincfg/chainhash v1.1.0
+	github.com/btcsuite/btclog v0.0.0-20241017175713-3428138b75c7
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.3.0 // indirect
+	golang.org/x/crypto v0.29.0 // indirect
 )
